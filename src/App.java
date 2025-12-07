@@ -1,5 +1,3 @@
-PASTA APP.JAVA
-Foi dividido em 3 partes, a sua é a 1
 
 import javax.swing.*;
 import java.awt.*; // Necessário para classes de layout (BorderLayout, FlowLayout, etc.) e cores (Color)
@@ -97,3 +95,49 @@ public class App extends JFrame {
         labelProbabilidade = new JLabel(" "); // Valor da Probabilidade
         labelMinutoEstimadoTitle = new JLabel(" "); // Título do Minuto
         labelMinutoEstimado = new JLabel(" "); // Valor do Minuto
+        // Painel Contêiner para o Status (mantido verticalmente centralizado)
+        
+        JPanel statusContainer = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        statusContainer.add(labelStatus);
+        
+        // --- NOVO: Contêiner para Probabilidade (Título + Valor lado a lado) ---
+        JPanel probContainer = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        probContainer.add(labelProbabilidadeTitle);
+        probContainer.add(labelProbabilidade); 
+        
+        // --- NOVO: Contêiner para Minuto Estimado (Título + Valor lado a lado) ---
+        JPanel minutoContainer = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        minutoContainer.add(labelMinutoEstimadoTitle);
+        minutoContainer.add(labelMinutoEstimado);
+        
+        // Empilhando os componentes no BoxLayout (CENTRO)
+        resultPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        resultPanel.add(statusContainer);
+        resultPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+        resultPanel.add(probContainer);   // Título e Valor LADO A LADO
+        resultPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+        resultPanel.add(minutoContainer); // Título e Valor LADO A LADO
+        resultPanel.add(Box.createVerticalGlue()); // Para empurrar os componentes para cima no painel central
+
+        // --- 3. Painel do Botão (SOUTH) ---
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.setBorder(new EmptyBorder(0, 0, 10, 0)); 
+
+        processarButton = new JButton("Processar Estatísticas");
+        processarButton.setFont(new Font("SansSerif", Font.BOLD, 14));
+        processarButton.setBackground(new Color(230, 230, 230)); 
+        processarButton.setForeground(Color.BLACK); 
+        // Associa o botão ao Listener (onde está a lógica de processamento)
+        processarButton.addActionListener(new ProcessarEstatisticasListener());
+        
+        buttonPanel.add(processarButton);
+
+        // --- Adicionar Painéis ao JFrame (Janela Principal) ---
+        add(inputPanel, BorderLayout.NORTH);
+        add(resultPanel, BorderLayout.CENTER);
+        add(buttonPanel, BorderLayout.SOUTH);
+
+        // Redimensiona a janela para se ajustar ao tamanho preferencial dos componentes
+        pack(); 
+        setVisible(true);
+    }
