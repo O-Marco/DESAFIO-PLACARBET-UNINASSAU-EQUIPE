@@ -1,4 +1,3 @@
-
 import javax.swing.*;
 import java.awt.*; // Necessário para classes de layout (BorderLayout, FlowLayout, etc.) e cores (Color)
 import java.awt.event.ActionEvent; // Classe de evento para o botão
