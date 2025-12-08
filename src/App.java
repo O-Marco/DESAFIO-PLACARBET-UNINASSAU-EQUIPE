@@ -141,3 +141,96 @@ public class App extends JFrame {
         pack(); 
         setVisible(true);
     }
+/**
+     * Classe interna responsável por ouvir o clique do botão e executar a lógica.
+     */
+    private class ProcessarEstatisticasListener implements ActionListener {
+        
+        // Formatadores de números usados para exibir os resultados com formato de porcentagem e decimal
+        private final DecimalFormat percentFormat = new DecimalFormat("0.0%", new java.text.DecimalFormatSymbols(Locale.US));
+        private final DecimalFormat minutoFormat = new DecimalFormat("0.0", new java.text.DecimalFormatSymbols(Locale.US));
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String nomeClube = clubeInput.getText().trim();
+
+            // 1. Limpa e Define o Status Inicial
+            labelStatus.setText("Processando...");
+            
+            // Limpa os rótulos de resultado
+            labelProbabilidadeTitle.setText(" ");
+            labelProbabilidade.setText(" ");
+            labelMinutoEstimadoTitle.setText(" ");
+            labelMinutoEstimado.setText(" ");
+            
+            // --- 1. Validação da Entrada ---
+            if (nomeClube.isEmpty() || (!nomeClube.equalsIgnoreCase("Sport") && !nomeClube.equalsIgnoreCase("Gremio"))) {
+                labelStatus.setText("Entrada Inválida!");
+                
+                
+                labelProbabilidade.setText("Por favor, digite 'Sport' ou 'Gremio'.");
+                labelProbabilidade.setFont(new Font("SansSerif", Font.PLAIN, 12));
+                
+                return; // Encerra a execução após o erro
+            }
+
+            // --- 2. Cálculo das Estatísticas (Acesso ao DAO) ---
+            Estatistica resultado = dao.calcularEstatisticas(nomeClube);
+
+            if (resultado == null) {
+                labelStatus.setText("Erro de Banco de Dados!");
+                labelStatus.setForeground(Color.RED);
+                
+                labelProbabilidade.setText("Falha ao acessar ou calcular os dados. Verifique o banco.");
+                labelProbabilidade.setFont(new Font("SansSerif", Font.PLAIN, 12));
+                labelProbabilidade.setForeground(Color.BLACK);
+                return; // Encerra a execução após o erro
+            }
+
+            // --- 3. Exibição dos Resultados (Puro Swing) ---
+            double probabilidade = resultado.getProbabilidadeGol();
+            
+            // Status de Sucesso (Cor agora é PRETO)
+            labelStatus.setText(String.format("✅ Análise Concluída para %s", nomeClube));
+            labelStatus.setForeground(Color.BLACK); 
+
+            // A) Probabilidade de Marcar Gol (Destaque Principal)
+            
+            // Título (Pequeno/Cinza)
+            labelProbabilidadeTitle.setText("Probabilidade de Gol no 1º Tempo: "); // Espaço no final para separação visual
+            labelProbabilidadeTitle.setFont(new Font("SansSerif", Font.PLAIN, 15));
+
+            // Valor (Maior/Negrito/Preto)
+            labelProbabilidade.setText(percentFormat.format(probabilidade));
+            labelProbabilidade.setFont(new Font("SansSerif", Font.BOLD, 18)); 
+            
+
+            // B) Minuto Estimado (Informação Secundária)
+            if (probabilidade > 0) {
+                double minutoEstimado = resultado.getMinutoEstimado();
+                
+                // Título (Pequeno/Cinza)
+                labelMinutoEstimadoTitle.setText("Minuto Estimado: "); // Espaço no final para separação visual
+                labelMinutoEstimadoTitle.setFont(new Font("SansSerif", Font.PLAIN, 15));
+            
+
+                // Valor (Médio/Negrito/Preto)
+                labelMinutoEstimado.setText(minutoFormat.format(minutoEstimado) + " minutos");
+                labelMinutoEstimado.setFont(new Font("SansSerif", Font.BOLD, 18)); 
+                
+
+            } else {
+                // Mensagem para caso não haja gols registrados
+                labelMinutoEstimadoTitle.setText(" ");
+                labelMinutoEstimado.setText("Nenhuma média de minuto calculada.");
+                labelMinutoEstimado.setFont(new Font("SansSerif", Font.ITALIC, 12)); 
+                
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        // Padrão Swing: garante que a criação da interface gráfica ocorra na Thread de Eventos do Swing (EDT), mantendo a segurança.
+        SwingUtilities.invokeLater(() -> new App());
+    }
+}
