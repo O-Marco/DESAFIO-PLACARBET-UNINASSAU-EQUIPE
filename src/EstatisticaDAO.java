@@ -51,8 +51,8 @@ public class EstatisticaDAO {
 
         } catch (Exception e) {
             System.err.println("Erro de acesso ao banco de dados: " + e.getMessage());
-            return null; // Retorna nulo em caso de falha
-        }
+            return null; // Retorna nulo em caso de falha
+        }
 
         // --- CÁLCULOS ESTATÍSTICOS ---
         
@@ -74,5 +74,5 @@ public class EstatisticaDAO {
 
         // Retorna o objeto com os resultados
         return new Estatistica(probabilidadeGol, minutoEstimado);
-    }
+    }
 }

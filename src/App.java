@@ -93,9 +93,9 @@ public class App extends JFrame {
         labelProbabilidadeTitle = new JLabel(" "); // Título da Probabilidade
         labelProbabilidade = new JLabel(" "); // Valor da Probabilidade
         labelMinutoEstimadoTitle = new JLabel(" "); // Título do Minuto
-        labelMinutoEstimado = new JLabel(" "); // Valor do Minuto
-        // Painel Contêiner para o Status (mantido verticalmente centralizado)
+        labelMinutoEstimado = new JLabel(" "); // Valor do Minuto
         
+        // Painel Contêiner para o Status (mantido verticalmente centralizado)
         JPanel statusContainer = new JPanel(new FlowLayout(FlowLayout.CENTER));
         statusContainer.add(labelStatus);
         
@@ -139,8 +139,9 @@ public class App extends JFrame {
         // Redimensiona a janela para se ajustar ao tamanho preferencial dos componentes
         pack(); 
         setVisible(true);
-    }
-/**
+    }
+
+    /**
      * Classe interna responsável por ouvir o clique do botão e executar a lógica.
      */
     private class ProcessarEstatisticasListener implements ActionListener {
@@ -230,6 +231,6 @@ public class App extends JFrame {
 
     public static void main(String[] args) {
         // Padrão Swing: garante que a criação da interface gráfica ocorra na Thread de Eventos do Swing (EDT), mantendo a segurança.
-        SwingUtilities.invokeLater(() -> new App());
-    }
+        SwingUtilities.invokeLater(() -> new App());
+    }
 }
